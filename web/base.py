@@ -15,7 +15,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 
 # Блокчейн
-BLOCKCHAIN_URL = "http://xxxx:8545"
+BLOCKCHAIN_URL = "https://data-seed-prebsc-1-s1.binance.org:8545/"
 web3 = Web3(Web3.HTTPProvider(BLOCKCHAIN_URL))
 web3.eth.default_account = web3.eth.accounts[0]
 
