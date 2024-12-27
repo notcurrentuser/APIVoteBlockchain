@@ -1,1 +1,2 @@
-from .vote import VoteModel, VoteRepository
+from .vote import VoteModel, SQLAlchemyVoteRepository
+from .vote import Base as VoteBase

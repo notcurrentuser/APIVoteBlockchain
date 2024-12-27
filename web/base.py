@@ -1,7 +1,6 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI
 from application.services import VotingService
-from infrastructure.sqlalchemy_vote_repository import SQLAlchemyVoteRepository
+from infrastructure.sqlalchemy_repositories import SQLAlchemyVoteRepository
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from web3 import Web3

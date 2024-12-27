@@ -1,1 +1,1 @@
-from VoteRepositories import VoteRepository
+from .VoteRepositories import VoteRepository
