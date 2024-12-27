@@ -1,6 +1,6 @@
 # Перша ініціалізація
 
-### Встановлення пакетів
+## Встановлення пакетів
 Для Windows та venv
 
 `pip install -r .\requirements.txt`
@@ -9,7 +9,7 @@
 
 `pip3 install -r requirements.txt`
 
-### Ініціалізація бази даних
+## Ініціалізація бази даних
 Для Windows та venv
 
 `python init_db.py`
@@ -20,6 +20,6 @@
 
 # Запуск проекта
 
-### Запуск API сервера
+## Запуск API сервера
 
 `uvicorn web.base:app --reload`
