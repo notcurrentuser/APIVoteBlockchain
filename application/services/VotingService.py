@@ -1,8 +1,10 @@
+from datetime import datetime
+
+from web3 import Web3
+
 from core.models import Vote
 from core.repositories import VoteRepository
-from datetime import datetime
-from web3 import Web3
-from web3.gas_strategies.time_based import slow_gas_price_strategy
+from config import BlockchainConfig
 
 
 class VotingService:
@@ -35,10 +37,10 @@ class VotingService:
     def _record_to_blockchain(self, vote: Vote) -> str:
         # Функція для запису в блокчейн
         tx = {
-            'to': '0xB2c0A791F886a210d49bb57c098243342a2cE62b',
+            'to': BlockchainConfig.TO_ADDRESS,
             'value': int(self.blockchain.to_wei(0.000001, 'ether')),
-            'gas': 300000,
-            'gasPrice': self.blockchain.to_wei('5', 'gwei'),
+            'gas': BlockchainConfig.GAS_NUMBER,
+            'gasPrice': self.blockchain.to_wei(BlockchainConfig.GAS_PRICE, 'gwei'),
             'nonce': self.blockchain.eth.get_transaction_count(self.blockchain.eth.default_account),
             'data': str.encode(f"Voter: {vote.voter_id}, Candidate: {vote.candidate_id}"),
             'chainId': self.blockchain.eth.chain_id
