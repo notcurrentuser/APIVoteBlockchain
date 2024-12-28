@@ -19,15 +19,19 @@ session = SessionLocal()
 # Блокчейн
 BLOCKCHAIN_URL = "https://data-seed-prebsc-1-s1.binance.org:8545/"
 web3 = Web3(Web3.HTTPProvider(BLOCKCHAIN_URL))
-# web3.eth.default_account = web3.eth.accounts[0]
+
+PRIVATE_KEY = "adf114dd49ec1b15873352a7527532557a0e4b0d92dcd730621bf62884b141fc"
+account = web3.eth.account.from_key(PRIVATE_KEY)
+
+web3.eth.default_account = account.address
 
 # Ініціалізація сервісу голосування
 repository = SQLAlchemyVoteRepository(session)
 service = VotingService(
     repository=repository,
     blockchain=web3,
-    contract_address="0xxxx",
-    private_key="xxxx"
+    contract_address="0x0000000000000000000000000000000000000000",
+    private_key=PRIVATE_KEY
 )
 
 

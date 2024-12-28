@@ -40,5 +40,5 @@ class VotingService:
             'data': str.encode(f"Voter: {vote.voter_id}, Candidate: {vote.candidate_id}")
         }
         signed_tx = self.blockchain.eth.account.sign_transaction(tx, self.private_key)
-        tx_hash = self.blockchain.eth.send_raw_transaction(signed_tx.rawTransaction)
+        tx_hash = self.blockchain.eth.send_raw_transaction(signed_tx.raw_transaction)
         return self.blockchain.to_hex(tx_hash)
