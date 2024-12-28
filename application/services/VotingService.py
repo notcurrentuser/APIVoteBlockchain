@@ -2,6 +2,7 @@ from core.models import Vote
 from core.repositories import VoteRepository
 from datetime import datetime
 from web3 import Web3
+from web3.gas_strategies.time_based import slow_gas_price_strategy
 
 
 class VotingService:
@@ -32,13 +33,15 @@ class VotingService:
     def _record_to_blockchain(self, vote: Vote) -> str:
         # Функція для запису в блокчейн
         tx = {
-            'to': self.contract_address,
-            'value': 0,
-            'gas': 2000000,
-            'gasPrice': self.blockchain.to_wei('50', 'gwei'),
+            'to': '0xB2c0A791F886a210d49bb57c098243342a2cE62b',
+            'value': int(self.blockchain.to_wei(0.000001, 'ether')),
+            'gas': 300000,
+            'gasPrice': self.blockchain.to_wei('20', 'gwei'),
             'nonce': self.blockchain.eth.get_transaction_count(self.blockchain.eth.default_account),
-            'data': str.encode(f"Voter: {vote.voter_id}, Candidate: {vote.candidate_id}")
+            'data': str.encode(f"Voter: {vote.voter_id}, Candidate: {vote.candidate_id}"),
+            'chainId': self.blockchain.eth.chain_id
         }
+
         signed_tx = self.blockchain.eth.account.sign_transaction(tx, self.private_key)
         tx_hash = self.blockchain.eth.send_raw_transaction(signed_tx.raw_transaction)
         return self.blockchain.to_hex(tx_hash)

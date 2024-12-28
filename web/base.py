@@ -6,6 +6,7 @@ from .models import VoteRequest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from web3 import Web3
+from web3.gas_strategies.time_based import slow_gas_price_strategy
 
 # Ініціалізація FastAPI
 app = FastAPI()
@@ -17,13 +18,18 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 
 # Блокчейн
-BLOCKCHAIN_URL = "https://data-seed-prebsc-1-s1.binance.org:8545/"
+BLOCKCHAIN_URL = "https://bscrpc.com"
 web3 = Web3(Web3.HTTPProvider(BLOCKCHAIN_URL))
 
 PRIVATE_KEY = "adf114dd49ec1b15873352a7527532557a0e4b0d92dcd730621bf62884b141fc"
 account = web3.eth.account.from_key(PRIVATE_KEY)
-
 web3.eth.default_account = account.address
+
+balance = web3.eth.get_balance(account.address)
+print("Баланс облікового запису:", web3.from_wei(balance, 'ether'))
+
+web3.eth.set_gas_price_strategy(slow_gas_price_strategy)
+web3.provider.cache_allowed_requests = True
 
 # Ініціалізація сервісу голосування
 repository = SQLAlchemyVoteRepository(session)
@@ -33,7 +39,6 @@ service = VotingService(
     contract_address="0x0000000000000000000000000000000000000000",
     private_key=PRIVATE_KEY
 )
-
 
 
 @app.post("/vote")
