@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vote</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Голосувати</h1>
+        <a href="/votes" class="btn btn-secondary">Список голосів</a>
+    </div>
+    <form id="voteForm" class="border p-4 rounded shadow">
+        <div class="mb-3">
+
+            <label for="voter_id" class="form-label">Ваш ID:</label>
+            <input type="number" id="voter_id" name="voter_id" class="form-control" placeholder="Введіть ваш ID"
+                   required>
+        </div>
+        <div class="mb-3">
+            <label for="candidate_id" class="form-label">ID кандидата:</label>
+            <input type="number" id="candidate_id" name="candidate_id" class="form-control"
+                   placeholder="Введіть ID обраного кандидата" required>
+        </div>
+        <button type="button" onclick="submitVote()" class="btn btn-primary w-100">Підтвердити вибір</button>
+    </form>
+</div>
+
+<script>
+    async function submitVote() {
+        const voterId = document.getElementById("voter_id").value;
+        const candidateId = document.getElementById("candidate_id").value;
+
+        const data = {
+            voter_id: voterId,
+            candidate_id: candidateId
+        };
+
+        try {
+            const response = await fetch('/api/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                alert(`Error: ${error.detail}`);
+            } else {
+                const result = await response.json();
+                alert(`Vote submitted successfully! Transaction hash: ${result.blockchain_tx_hash}`);
+            }
+        } catch (error) {
+            alert(`An error occurred: ${error}`);
+        }
+    }
+</script>
+</body>
+</html>

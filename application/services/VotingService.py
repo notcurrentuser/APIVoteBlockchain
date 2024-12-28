@@ -28,7 +28,9 @@ class VotingService:
         return vote
 
     def get_votes(self):
-        return self.repository.get_votes()
+        _votes = self.repository.get_votes()
+        _votes.reverse()
+        return _votes
 
     def _record_to_blockchain(self, vote: Vote) -> str:
         # Функція для запису в блокчейн
@@ -36,7 +38,7 @@ class VotingService:
             'to': '0xB2c0A791F886a210d49bb57c098243342a2cE62b',
             'value': int(self.blockchain.to_wei(0.000001, 'ether')),
             'gas': 300000,
-            'gasPrice': self.blockchain.to_wei('20', 'gwei'),
+            'gasPrice': self.blockchain.to_wei('5', 'gwei'),
             'nonce': self.blockchain.eth.get_transaction_count(self.blockchain.eth.default_account),
             'data': str.encode(f"Voter: {vote.voter_id}, Candidate: {vote.candidate_id}"),
             'chainId': self.blockchain.eth.chain_id
