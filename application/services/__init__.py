@@ -1,1 +1,1 @@
-from .VotingService import VoteRepository
+from .VotingService import VotingService

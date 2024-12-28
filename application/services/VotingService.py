@@ -1,7 +1,8 @@
 from core.models import Vote
 from core.repositories import VoteRepository
 from datetime import datetime
-from web3 import Web3
+from web3 import Web3, gas_strategies
+
 
 
 class VotingService:
@@ -35,10 +36,11 @@ class VotingService:
             'to': self.contract_address,
             'value': 0,
             'gas': 2000000,
-            'gasPrice': self.blockchain.toWei('50', 'gwei'),
+            'gasPrice': Web3.toWei('50', 'gwei'),
+            # 'gasPrice': gas_strategies.time_based.fast_gas_price_strategy('50', 'gwei'),
             'nonce': self.blockchain.eth.getTransactionCount(self.blockchain.eth.default_account),
             'data': str.encode(f"Voter: {vote.voter_id}, Candidate: {vote.candidate_id}")
         }
         signed_tx = self.blockchain.eth.account.sign_transaction(tx, self.private_key)
         tx_hash = self.blockchain.eth.send_raw_transaction(signed_tx.rawTransaction)
-        return self.blockchain.toHex(tx_hash)
+        return Web3.toHex(tx_hash)
